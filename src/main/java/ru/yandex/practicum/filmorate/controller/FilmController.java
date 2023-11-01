@@ -17,7 +17,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    private final static Logger log = LoggerFactory.getLogger(FilmController.class);
+    private final Logger log = LoggerFactory.getLogger(FilmController.class);
     private final HashMap<Integer, Film> films = new HashMap<>();
     private int id = 0;
 
@@ -66,6 +66,7 @@ public class FilmController {
         });
         return errors;
     }
+    
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<NotFoundException> handleException(NotFoundException exception) {
         return ResponseEntity
