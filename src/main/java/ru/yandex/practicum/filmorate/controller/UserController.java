@@ -58,8 +58,7 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
@@ -68,11 +67,9 @@ public class UserController {
         });
         return errors;
     }
-    
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<NotFoundException> handleException(NotFoundException exception) {
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(exception);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception);
     }
 }
