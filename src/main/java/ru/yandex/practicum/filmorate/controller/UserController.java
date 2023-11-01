@@ -12,12 +12,14 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private final static Logger log = LoggerFactory.getLogger(UserController.class);
+    private final Logger log = LoggerFactory.getLogger(UserController.class);
     private final HashMap<Integer, User> users = new HashMap<>();
     private int id = 0;
 
@@ -66,6 +68,7 @@ public class UserController {
         });
         return errors;
     }
+    
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<NotFoundException> handleException(NotFoundException exception) {
         return ResponseEntity
