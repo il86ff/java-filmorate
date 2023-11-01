@@ -9,9 +9,9 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidFilmReleaseDate {
-    String message() default "Release date must be after 28.12.1895" ;
+    String message() default "Release date must be after 28.12.1895";
 
-    Class<?>[] groups() default { };
+    Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default { };
+    Class<? extends Payload>[] payload() default {};
 }
