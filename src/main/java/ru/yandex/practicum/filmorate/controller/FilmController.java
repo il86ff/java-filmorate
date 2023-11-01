@@ -12,7 +12,9 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/films")
@@ -66,7 +68,7 @@ public class FilmController {
         });
         return errors;
     }
-    
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<NotFoundException> handleException(NotFoundException exception) {
         return ResponseEntity
