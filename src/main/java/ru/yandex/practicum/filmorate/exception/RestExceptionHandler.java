@@ -34,4 +34,13 @@ public class RestExceptionHandler extends ExceptionHandlerExceptionResolver {
                 .status(HttpStatus.NOT_FOUND)
                 .body(messages);
     }
+
+    @ExceptionHandler({IdIsNullException.class, DuplicateIdException.class})
+    public ResponseEntity<Set<String>> handleException(Exception exception) {
+        Set<String> messages = new HashSet<>();
+        messages.add(exception.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(messages);
+    }
 }
