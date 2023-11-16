@@ -28,7 +28,7 @@ public class FilmService {
         log.info("Добавляем фильм {}", film);
         if (filmStorage.getAll().contains(filmStorage.getById(film.getId()))) {
             log.info("фильм с id = {} уже существует...", film.getId());
-            throw new DuplicateIdException(String.format("фильм с id = %s уже существует...",film.getId()));
+            throw new DuplicateIdException(String.format("фильм с id = %s уже существует...", film.getId()));
         }
         return filmStorage.add(film);
     }
@@ -57,12 +57,12 @@ public class FilmService {
 
     public Film getById(Integer id) {
         if (filmStorage.getById(id) == null) {
-            throw new NotFoundException(String.format("Фильма с id = %s не существует...",id));
+            throw new NotFoundException(String.format("Фильма с id = %s не существует...", id));
         }
         return filmStorage.getById(id);
     }
 
-    public Film addLike (Integer filmId, Integer userId) {
+    public Film addLike(Integer filmId, Integer userId) {
         log.info("Добавляем лайк пользователя с id {} у фильма id {}.", userId, filmId);
         return filmStorage.addLike(filmId, userId);
     }
@@ -70,8 +70,9 @@ public class FilmService {
     public void deleteLike(Integer filmId, Integer userId) {
         log.info("Удаляем лайк пользователя с id {} у фильма id {}.", userId, filmId);
         List<Integer> idList = getAll().stream().map(Film::getId).collect(Collectors.toList());
-        if(!idList.contains(filmId)) throw new NotFoundException(String.format("Фильм с id = %s не найден", filmId));
-        if(!getById(filmId).getLikesUserId().contains(userId))
+        if (!idList.contains(filmId))
+            throw new NotFoundException(String.format("Фильм с id = %s не найден", filmId));
+        if (!getById(filmId).getLikesUserId().contains(userId))
             throw new NotFoundException(String.format("Лайк пользователя с id = %s, у фильма id = %s, не найден", userId, filmId));
         filmStorage.deleteLike(filmId, userId);
     }
