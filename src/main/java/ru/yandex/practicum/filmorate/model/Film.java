@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.yandex.practicum.filmorate.validation.ValidFilmReleaseDate;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,6 +14,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 public class Film {
+    private final Set<Integer> likesUserId;
     private Integer id;
     @NotBlank
     private String name;
@@ -21,7 +24,6 @@ public class Film {
     private LocalDate releaseDate;
     @Positive
     private long duration;
-    private final Set<Integer> likesUserId;
 
     public Film() {
         likesUserId = new HashSet<>();
