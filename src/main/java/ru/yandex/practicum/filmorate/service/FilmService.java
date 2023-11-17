@@ -27,7 +27,6 @@ public class FilmService {
     public Film add(Film film) {
         log.info("Добавляем фильм {}", film);
         if (filmStorage.getAll().contains(filmStorage.getById(film.getId()))) {
-            log.info("фильм с id = {} уже существует...", film.getId());
             throw new DuplicateIdException(String.format("фильм с id = %s уже существует...", film.getId()));
         }
         return filmStorage.add(film);
@@ -36,12 +35,10 @@ public class FilmService {
     public Film update(Film film) {
         log.info("Обновляем фильм {}", film);
         if (film.getId() == null) {
-            log.warn("id фильма забыли передать...");
-            throw new IdIsNullException("Ошибка обновления фильма... ID не передан");
+            throw new IdIsNullException(String.format("Ошибка обновления фильма %s. ID не передан", film));
         }
         if (!filmStorage.getAll().contains(filmStorage.getById(film.getId()))) {
-            log.warn("Фильм с id = {} не существует...", film.getId());
-            throw new NotFoundException("Фильм не существует...");
+            throw new NotFoundException(String.format("Фильм с id = %s не существует...", film.getId()));
         }
         return filmStorage.update(film);
     }
@@ -67,7 +64,7 @@ public class FilmService {
         return filmStorage.addLike(filmId, userId);
     }
 
-    public void deleteLike(Integer filmId, Integer userId) {
+    public Film deleteLike(Integer filmId, Integer userId) {
         log.info("Удаляем лайк пользователя с id {} у фильма id {}.", userId, filmId);
         List<Integer> idList = getAll().stream().map(Film::getId).collect(Collectors.toList());
         if (!idList.contains(filmId))
@@ -75,6 +72,7 @@ public class FilmService {
         if (!getById(filmId).getLikesUserId().contains(userId))
             throw new NotFoundException(String.format("Лайк пользователя с id = %s, у фильма id = %s, не найден", userId, filmId));
         filmStorage.deleteLike(filmId, userId);
+        return filmStorage.getById(filmId);
     }
 
     public List<Film> getMostPopular(Integer count) {

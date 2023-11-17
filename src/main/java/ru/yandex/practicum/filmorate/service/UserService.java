@@ -27,7 +27,6 @@ public class UserService {
     public User add(User user) {
         log.info("Добавляем пользователя {}", user);
         if (userStorage.getAll().contains(userStorage.getById(user.getId()))) {
-            log.info("Пользователь с id = {} уже существует...", user.getId());
             throw new DuplicateIdException(String.format("Пользователь с id = %s уже существует...", user.getId()));
         }
         user.setName(user.getName().isBlank() ? user.getLogin() : user.getName());
@@ -37,12 +36,10 @@ public class UserService {
     public User update(User user) {
         log.info("Добавляем пользователя {}", user);
         if (user.getId() == null) {
-            log.warn("id пользователя забыли передать...");
-            throw new IdIsNullException("Ошибка обновления пользователя... ID не передан");
+            throw new IdIsNullException(String.format("Ошибка обновления пользователя %s ID не передан", user));
         }
         if (!userStorage.getAll().contains(userStorage.getById(user.getId()))) {
-            log.warn("Пользователь с id = {} не существует...", user.getId());
-            throw new NotFoundException("Пользователь не существует...");
+            throw new NotFoundException(String.format("Пользователь с id = %s не существует...", user.getId()));
         }
         return userStorage.update(user);
     }
