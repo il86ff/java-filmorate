@@ -1,54 +1,61 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private final Logger log = LoggerFactory.getLogger(UserController.class);
-    private final HashMap<Integer, User> users = new HashMap<>();
-    private int id = 0;
+
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     public Collection<User> returnAll() {
-        return users.values();
+        return userService.getAll();
     }
 
     @PostMapping
     public User create(@Valid @RequestBody User user) {
-        log.info("Добавляем пользователя {}", user);
-        if (users.containsKey(user.getId())) {
-            log.warn("Пользователь с id = {} уже существует...", user.getId());
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
-        }
-        user.setId(++id);
-        user.setName(user.getName() == null ? user.getLogin() : user.getName());
-        users.put(id, user);
-        return user;
+        return userService.add(user);
     }
 
     @PutMapping
     public User update(@Valid @RequestBody User user) {
-        log.info("Обновляем пользователя {}", user);
-        if (user.getId() == null) {
-            log.info("id пользователя забыли передать...");
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
-        }
-        if (!users.containsKey(user.getId())) {
-            log.info("Пользователь с id = {} не существует...", user.getId());
-            throw new NotFoundException("Пользователь не существует...");
-        }
-        users.put(user.getId(), user);
+        userService.update(user);
         return user;
+    }
+
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable Integer id) {
+        return userService.getById(id);
+    }
+
+    @PutMapping("/{id}/friends/{friendId}")
+    public User addFriend(@PathVariable Integer id, @PathVariable Integer friendId) {
+        return userService.addFriend(id, friendId);
+    }
+
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public User removeFriend(@PathVariable Integer id, @PathVariable Integer friendId) {
+        return userService.removeFriend(id, friendId);
+    }
+
+    @GetMapping("/{id}/friends")
+    public List<User> getFriends(@PathVariable Integer id) {
+        return userService.getFriends(id);
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public List<User> getCommonFriends(@PathVariable Integer id, @PathVariable Integer otherId) {
+        return userService.getCommonFriends(id, otherId);
     }
 }
