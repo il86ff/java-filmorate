@@ -27,8 +27,7 @@ public class UserService {
     private final FriendshipDao friendshipDao;
 
     @Autowired
-    public UserService(@Qualifier("DBUserStorage") DBUserStorage userStorage,
-                       FriendshipDao friendshipDao) {
+    public UserService(@Qualifier("DBUserStorage") DBUserStorage userStorage, FriendshipDao friendshipDao) {
         this.userStorage = userStorage;
         this.friendshipDao = friendshipDao;
     }
@@ -77,12 +76,11 @@ public class UserService {
     public User addFriend(Integer id, Integer friendId) {
         log.info("Добавляем пользователю с id {}, друга с id {}", id, friendId);
         List<Integer> idList = getAll().stream().map(User::getId).collect(Collectors.toList());
-        if(Objects.equals(id, friendId)) throw new DuplicateIdException("нельзя добавить себя в друзья...");
+        if (Objects.equals(id, friendId)) throw new DuplicateIdException("нельзя добавить себя в друзья...");
         if (!idList.contains(id)) throw new NotFoundException(String.format("Пользователь с id = %s не найден", id));
         if (!idList.contains(friendId))
             throw new NotFoundException(String.format("Пользователь с id = %s не найден", friendId));
-        if (!friendshipDao.exist(id, friendId))
-            friendshipDao.addFriend(id, friendId, true);
+        if (!friendshipDao.exist(id, friendId)) friendshipDao.addFriend(id, friendId, true);
         return getById(id);
     }
 
@@ -94,9 +92,7 @@ public class UserService {
 
     public List<User> getFriends(Integer id) {
         log.info("Вывести друзей пользователя с id {}", id);
-        return friendshipDao.getFriends(id).stream()
-                .map(this::getById)
-                .collect(Collectors.toList());
+        return friendshipDao.getFriends(id).stream().map(this::getById).collect(Collectors.toList());
 
     }
 
@@ -108,8 +104,6 @@ public class UserService {
                 commonId.add(i);
             }
         }
-        return commonId.stream()
-                .map(this::getById)
-                .collect(Collectors.toList());
+        return commonId.stream().map(this::getById).collect(Collectors.toList());
     }
 }
