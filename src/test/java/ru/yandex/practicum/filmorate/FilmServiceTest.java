@@ -28,21 +28,13 @@ public class FilmServiceTest {
     private final UserService userService;
     private final JdbcTemplate jdbcTemplate;
 
-    private final User user =
-            new User(null, "mail@mail.ru", "dolore", "Nick Name", LocalDate.of(1946, 8, 20));
+    private final User user = new User(null, "mail@mail.ru", "dolore", "Nick Name", LocalDate.of(1946, 8, 20));
 
-    private final User user2 =
-            new User(null, "mail2@mail.ru", "2dolore", "2Nick Name", LocalDate.of(1946, 8, 20));
+    private final User user2 = new User(null, "mail2@mail.ru", "2dolore", "2Nick Name", LocalDate.of(1946, 8, 20));
 
-    private final Film film =
-            new Film(null, "TERMINATOR", "about end of humanity"
-                    , LocalDate.of(1987, 10, 1), 123, new Mpa(1, "G")
-                    , new HashSet<>());
+    private final Film film = new Film(null, "TERMINATOR", "about end of humanity", LocalDate.of(1987, 10, 1), 123, new Mpa(1, "G"), new HashSet<>());
 
-    private final Film film2 =
-            new Film(null, "TERMINATOR 2", "about end of humanity for second time..."
-                    , LocalDate.of(1987, 10, 1), 123, new Mpa(1, "G")
-                    , new HashSet<>());
+    private final Film film2 = new Film(null, "TERMINATOR 2", "about end of humanity for second time...", LocalDate.of(1987, 10, 1), 123, new Mpa(1, "G"), new HashSet<>());
 
     @AfterEach
     void afterEach() {
@@ -69,16 +61,14 @@ public class FilmServiceTest {
         filmFromDB.setMpa(new Mpa(2, "PG"));
         filmService.update(filmFromDB);
 
-        Assertions.assertEquals(filmService.getById(filmFromDB.getId()).getMpa().getName(),
-                filmFromDB.getMpa().getName());
+        Assertions.assertEquals(filmService.getById(filmFromDB.getId()).getMpa().getName(), filmFromDB.getMpa().getName());
     }
 
     @Test
     public void shouldCorrectlyGetByID() {
         Film filmFromDB = filmService.add(film);
 
-        Assertions.assertEquals(filmService.getById(filmFromDB.getId()),
-                filmFromDB);
+        Assertions.assertEquals(filmService.getById(filmFromDB.getId()), filmFromDB);
     }
 
     @Test
