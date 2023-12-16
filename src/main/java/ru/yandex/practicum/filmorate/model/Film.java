@@ -28,5 +28,7 @@ public class Film {
     private Mpa mpa;
     private Set<Genre> genres;
 
-    public Film() {genres = new HashSet<>();}
+    public Film() {
+        genres = new HashSet<>();
+    }
 }
