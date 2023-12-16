@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class FriendshipDaoImpl implements FriendshipDao{
+public class FriendshipDaoImpl implements FriendshipDao {
     private final JdbcTemplate jdbcTemplate;
+
     @Override
     public void addFriend(Integer userId, Integer friendId, boolean isFriend) {
-        jdbcTemplate.update("INSERT INTO friends (user_id, friend_id, is_friend) VALUES(?, ?, ?)",
-                userId, friendId, isFriend);
+        jdbcTemplate.update("INSERT INTO friends (user_id, friend_id, is_friend) VALUES(?, ?, ?)", userId, friendId, isFriend);
     }
 
     @Override
@@ -29,20 +29,13 @@ public class FriendshipDaoImpl implements FriendshipDao{
 
     @Override
     public Collection<Integer> getFriends(Integer userId) {
-        Collection<Integer> friends = jdbcTemplate.query(
-                "SELECT user_id, friend_id, is_friend FROM friends WHERE user_id=?",
-                new FriendshipMapper(), userId)
-                .stream()
-                .map(Friendship::getFriendId)
-                .collect(Collectors.toList());
+        Collection<Integer> friends = jdbcTemplate.query("SELECT user_id, friend_id, is_friend FROM friends WHERE user_id=?", new FriendshipMapper(), userId).stream().map(Friendship::getFriendId).collect(Collectors.toList());
         return friends;
     }
 
     @Override
     public Friendship getFriend(Integer userId, Integer friendId) {
-        return jdbcTemplate.queryForObject(
-                "SELECT user_id, friend_id, is_friend FROM friends WHERE user_id=? AND friend_id=?",
-                new FriendshipMapper(), userId, friendId);
+        return jdbcTemplate.queryForObject("SELECT user_id, friend_id, is_friend FROM friends WHERE user_id=? AND friend_id=?", new FriendshipMapper(), userId, friendId);
     }
 
     @Override
