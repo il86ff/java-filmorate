@@ -1,14 +1,17 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.storage.memory;
 
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class InMemoryUserStorage implements UserStorage {
-    private final HashMap<Integer, User> users = new HashMap<>();
+    private final Map<Integer, User> users = new HashMap<>();
+    private final Map<Integer, Integer> friends = new HashMap<>();
     private int id = 0;
 
     @Override
@@ -41,15 +44,18 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User addFriend(Integer id, Integer friendId) {
-        getById(id).getFriendsId().add(friendId);
-        getById(friendId).getFriendsId().add(id);
-        return null;
+        friends.put(id, friendId);
+        return getById(id);
     }
 
     @Override
     public User removeFriend(Integer id, Integer friendId) {
-        getById(id).getFriendsId().remove(friendId);
-        getById(friendId).getFriendsId().remove(id);
+        friends.remove(id);
         return getById(id);
+    }
+
+    @Override
+    public boolean exists(Integer id) {
+        return false;
     }
 }
