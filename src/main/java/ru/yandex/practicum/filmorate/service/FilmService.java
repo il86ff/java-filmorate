@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class FilmService {
-    private final Logger log = LoggerFactory.getLogger(FilmController.class);
     private final FilmStorage filmStorage;
     private final GenreDao genreDao;
     private final MpaDao mpaDao;
@@ -70,6 +71,7 @@ public class FilmService {
     }
 
     public Collection<Film> getAll() {
+        log.info("полуение списка всех фильмов");
         Collection<Film> films = filmStorage.getAll();
         for (Film f : films) {
             f.setMpa(mpaDao.getById(f.getMpa().getId()));
@@ -87,6 +89,7 @@ public class FilmService {
     }
 
     public Film getById(Integer id) {
+        log.info("получить фильм по id {}", id);
         if (!filmStorage.exists(id)) {
             throw new NotFoundException(String.format("Фильма с id = %s не существует...", id));
         }

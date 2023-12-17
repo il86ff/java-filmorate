@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class UserService {
-    private final Logger log = LoggerFactory.getLogger(FilmController.class);
     private final UserStorage userStorage;
     private final FriendshipDao friendshipDao;
 
@@ -67,6 +68,7 @@ public class UserService {
     }
 
     public User getById(Integer id) {
+        log.info("получение пользователья по id {}", id);
         if (!userStorage.exists(id)) {
             throw new NotFoundException(String.format("Пользователя с id = %s не существует...", id));
         }
