@@ -39,8 +39,10 @@ public class FilmService {
         log.info("Добавляем фильм {}", film);
         if (film.getId() != null) {
             if (filmStorage.exists(film.getId())) {
+                log.warn("фильм с id = {} уже существует", film.getId());
                 throw new DuplicateIdException(String.format("фильм с id = %s уже существует...", film.getId()));
             } else {
+                log.warn("невозможно добавить новый фильм с предзаполненым id...");
                 throw new IllegalArgumentException("ID присваевается в БД...");
             }
         }
@@ -55,9 +57,11 @@ public class FilmService {
     public Film update(Film film) {
         log.info("Обновляем фильм {}", film);
         if (film.getId() == null) {
+            log.warn("Ошибка обновления фильма. ID не передан");
             throw new IdIsNullException(String.format("Ошибка обновления фильма %s. ID не передан", film));
         }
         if (!filmStorage.exists(film.getId())) {
+            log.warn("Ошибка обновления фильма. ID = {} не существует в БД.", film.getId());
             throw new NotFoundException(String.format("Фильм с id = %s не существует...", film.getId()));
         }
         Film newFilm = filmStorage.update(film);
@@ -76,7 +80,6 @@ public class FilmService {
                 f.getGenres().add(g);
             }
         }
-
         return films;
     }
 
@@ -88,6 +91,7 @@ public class FilmService {
     public Film getById(Integer id) {
         log.info("получить фильм по id {}", id);
         if (!filmStorage.exists(id)) {
+            log.warn("Ошибка получения фильма по ID фильма. ID = {} не существует в БД.", id);
             throw new NotFoundException(String.format("Фильма с id = %s не существует...", id));
         }
         Film film = filmStorage.getById(id);
@@ -108,8 +112,10 @@ public class FilmService {
         log.info("Удаляем лайк пользователя с id {} у фильма id {}.", userId, filmId);
         List<Integer> idList = getAll().stream().map(Film::getId).collect(Collectors.toList());
         if (!idList.contains(filmId)) throw new NotFoundException(String.format("Фильм с id = %s не найден", filmId));
-        if (!likeDao.isFilmLikedByUser(filmId, userId))
+        if (!likeDao.isFilmLikedByUser(filmId, userId)) {
+            log.warn("Ошибка удаления лайка. Лайк пользователя с id = {}, у фильма id = {} не существует в БД.", filmId, userId);
             throw new NotFoundException(String.format("Лайк пользователя с id = %s, у фильма id = %s, не найден", userId, filmId));
+        }
         likeDao.remove(filmId, userId);
         return filmStorage.getById(filmId);
     }

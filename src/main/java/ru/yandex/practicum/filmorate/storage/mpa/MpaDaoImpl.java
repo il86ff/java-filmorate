@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.storage.mpa;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -9,6 +10,7 @@ import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.util.Collection;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class MpaDaoImpl implements MpaDao {
@@ -30,6 +32,7 @@ public class MpaDaoImpl implements MpaDao {
             getById(id);
             return true;
         } catch (EmptyResultDataAccessException exception) {
+            log.trace("Категории с id {} нет в БД", id);
             return false;
         }
     }

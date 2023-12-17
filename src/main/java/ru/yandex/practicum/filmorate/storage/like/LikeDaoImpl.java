@@ -38,7 +38,7 @@ public class LikeDaoImpl implements LikeDao {
             log.trace("Фильм {} пролайкан пользователем {}", filmId, userId);
             return true;
         } catch (EmptyResultDataAccessException exception) {
-            log.trace("Фильм {} еще не успел понраится пользователю {}", filmId, userId);
+            log.trace("Фильм {} еще не успел понравиться пользователю {}", filmId, userId);
             return false;
         }
     }
